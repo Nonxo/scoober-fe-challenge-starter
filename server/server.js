@@ -1,8 +1,10 @@
-const io = require("socket.io")(5000, {
-  cors: {
-    origin: "*",
-  },
-});
+const express = require("express");
+const app = express();
+const http = require("http");
+const socketIo = require("socket.io");
+
+const port = process.env.PORT || 5000;
+const index = require("./route");
 const {
   PLAYER,
   createNewGame,
@@ -11,6 +13,14 @@ const {
   turn,
   leaveGame,
 } = require("./utils");
+
+app.use(index);
+
+const server = http.createServer(app);
+
+const io = socketIo(server);
+
+let interval;
 
 //Fake DB
 let gamesState = [];
@@ -24,6 +34,17 @@ const onLeave = (state, id) => {
 };
 
 io.on("connection", (socket) => {
+  console.log("a user connected");
+
+  if (interval) {
+    clearInterval(interval);
+  }
+  interval = setInterval(() => getApiAndEmit(socket), 1000);
+  socket.on("disconnect", () => {
+    console.log("Client disconnected");
+    clearInterval(interval);
+  });
+
   socket.on("newgame", ({ user, isSingleUser }) => {
     socket.userId = user.id;
 
@@ -88,3 +109,11 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", () => onLeave(gamesState, socket.userId));
 });
+
+const getApiAndEmit = (socket) => {
+  const response = new Date();
+  // Emitting a new message. Will be consumed by the client
+  socket.emit("FromAPI", response);
+};
+
+server.listen(port, () => console.log(`Listening on port ${port}`));
