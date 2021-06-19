@@ -1,9 +1,12 @@
 const express = require("express");
 const app = express();
-const http = require("http");
-const socketIo = require("socket.io");
+const http = require("http").createServer(app);
+const io = require("socket.io")(http, {
+  cors: { origin: "http://localhost:3000", method: ["GET", "POST"] },
+});
 
 const port = process.env.PORT || 5000;
+
 const index = require("./route");
 const {
   PLAYER,
@@ -16,14 +19,11 @@ const {
 
 app.use(index);
 
-const server = http.createServer(app);
-
-const io = socketIo(server);
-
 let interval;
 
 //Fake DB
 let gamesState = [];
+let players = [];
 
 const onLeave = (state, id) => {
   const [newState, updatedGame] = leaveGame(state, id);
@@ -34,16 +34,7 @@ const onLeave = (state, id) => {
 };
 
 io.on("connection", (socket) => {
-  console.log("a user connected");
-
-  if (interval) {
-    clearInterval(interval);
-  }
-  interval = setInterval(() => getApiAndEmit(socket), 1000);
-  socket.on("disconnect", () => {
-    console.log("Client disconnected");
-    clearInterval(interval);
-  });
+  console.log(socket.id, "a user connected");
 
   socket.on("newgame", ({ user, isSingleUser }) => {
     socket.userId = user.id;
@@ -110,10 +101,4 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => onLeave(gamesState, socket.userId));
 });
 
-const getApiAndEmit = (socket) => {
-  const response = new Date();
-  // Emitting a new message. Will be consumed by the client
-  socket.emit("FromAPI", response);
-};
-
-server.listen(port, () => console.log(`Listening on port ${port}`));
+http.listen(port, () => console.log(`Listening on port ${port}`));
