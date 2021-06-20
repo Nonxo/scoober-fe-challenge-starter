@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Game from "./components/Game";
+import socketIOClient from "socket.io-client";
+const SERVER = "http://127.0.0.1:5000";
 
 function App() {
-  const [response, setResponse] = useState("");
   const [loading, setLoading] = useState(false);
   const [startGame, setStartGame] = useState(false);
-
-  useEffect(() => {}, []);
+  const socket = socketIOClient(SERVER);
 
   const handleClickEvent = () => {
     setLoading(true);
@@ -73,7 +73,7 @@ function App() {
           </div>
         </>
       ) : (
-        <Game isSinglePLayer={true} />
+        <Game socket={socket} />
       )}
     </div>
   );
