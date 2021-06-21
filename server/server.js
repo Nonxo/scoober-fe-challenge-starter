@@ -19,11 +19,8 @@ const {
 
 app.use(index);
 
-let interval;
-
 //Fake DB
 let gamesState = [];
-let players = [];
 
 const onLeave = (state, id) => {
   const [newState, updatedGame] = leaveGame(state, id);

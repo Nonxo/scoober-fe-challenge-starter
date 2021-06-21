@@ -68,7 +68,7 @@ function App() {
                   ></path>
                 </svg>
               )}
-              {loading ? "loading..." : "Start New Game"}
+              {loading ? "loading..." : "Play Scoober Game"}
             </button>
           </div>
         </>

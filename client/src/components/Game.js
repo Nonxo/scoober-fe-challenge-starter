@@ -3,6 +3,8 @@ import { generateUserId } from "../utils/utils";
 import Logo from "../assets/img/logo.png";
 import { ArrowCircleRightIcon } from "@heroicons/react/outline";
 import GameArea from "./GameArea";
+import { useDispatch } from "react-redux";
+import { handleRequest } from "../redux/actions/actionCreator";
 
 const Game = ({ socket }) => {
   const [user, setUser] = useState(null);
@@ -10,6 +12,7 @@ const Game = ({ socket }) => {
   const [showNextButton, setShowNextButton] = useState(false);
   const [isSinglePlayer, setIsSinglePlayer] = useState(true);
   const [gameData, setGameData] = useState(null);
+  const dispatch = useDispatch();
   const player = {
     id: generateUserId(),
     nickname: "",
@@ -40,6 +43,8 @@ const Game = ({ socket }) => {
     socket.emit("newgame", { user, isSinglePlayer });
     socket.on("game", (data) => {
       setGameData(data);
+      console.log(data);
+      dispatch(handleRequest("FETCH_PLAYER_DATA", data));
     });
   };
 
@@ -104,7 +109,7 @@ const Game = ({ socket }) => {
           )}
         </div>
       ) : (
-        <GameArea />
+        <GameArea socket={socket} user={user} />
       )}
     </React.Fragment>
   );
