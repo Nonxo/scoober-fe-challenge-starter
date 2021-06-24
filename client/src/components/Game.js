@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { generateUserId } from "../utils/utils";
 import Logo from "../assets/img/logo.png";
 import { ArrowCircleRightIcon } from "@heroicons/react/outline";
@@ -10,7 +10,7 @@ const Game = ({ socket }) => {
   const [user, setUser] = useState(null);
   const [optionValue, setOptionValue] = useState("single");
   const [showNextButton, setShowNextButton] = useState(false);
-  const [isSinglePlayer, setIsSinglePlayer] = useState(true);
+  const [isSingleUser, setIsSingleUser] = useState(true);
   const [gameData, setGameData] = useState(null);
   const dispatch = useDispatch();
   const player = {
@@ -33,14 +33,14 @@ const Game = ({ socket }) => {
   const handleOptionChange = (event) => {
     setOptionValue(event.target.value);
     if (optionValue === "single") {
-      setIsSinglePlayer(true);
+      setIsSingleUser(true);
     } else {
-      setIsSinglePlayer(false);
+      setIsSingleUser(false);
     }
   };
 
   const onPlayModeSelected = () => {
-    socket.emit("newgame", { user, isSinglePlayer });
+    socket.emit("newgame", { user, isSingleUser });
     socket.on("game", (data) => {
       setGameData(data);
       console.log(data);
@@ -99,7 +99,7 @@ const Game = ({ socket }) => {
               </span>
             </label>
           </div>
-          {isSinglePlayer && showNextButton && (
+          {isSingleUser && showNextButton && (
             <div className="flex justify-end mt-5">
               <ArrowCircleRightIcon
                 className="text-center h-8 w-8 text-gray-500 cursor-pointer"
@@ -107,7 +107,7 @@ const Game = ({ socket }) => {
               />
             </div>
           )}
-          {!isSinglePlayer && gameData?.playerTwo == null && showNextButton && (
+          {!isSingleUser && gameData?.playerTwo == null && showNextButton && (
             <div className="flex justify-end mt-5">
               <button
                 type="button"

@@ -37,8 +37,8 @@ io.on("connection", (socket) => {
     socket.userId = user.id;
 
     if (isSingleUser) {
-      const game = createNewGame({ user, isSingleUser });
       console.log(isSingleUser);
+      const game = createNewGame({ user, isSingleUser });
       gamesState.push(game);
 
       socket.join(game.id);
@@ -70,6 +70,8 @@ io.on("connection", (socket) => {
 
   socket.on("turn", (attempt) => {
     gamesState = turn(gamesState, attempt);
+    console.log(gamesState);
+    console.log(attempt.gameId);
 
     const game = findGame(gamesState, attempt.gameId);
 
