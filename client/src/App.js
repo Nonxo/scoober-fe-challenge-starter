@@ -6,11 +6,7 @@ const SERVER = "https://scoober-fe-challenge.herokuapp.com/";
 function App() {
   const [loading, setLoading] = useState(false);
   const [startGame, setStartGame] = useState(false);
-  const socket = socketIOClient(SERVER, {
-    extraHeaders: {
-      "my-custom-header": "abcd",
-    },
-  });
+  const socket = socketIOClient(SERVER);
 
   const handleClickEvent = () => {
     setLoading(true);
