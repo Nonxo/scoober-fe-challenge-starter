@@ -23,11 +23,11 @@ const GameArea = ({ socket, user }) => {
   return (
     <React.Fragment>
       {gameData && !gameData.winner && gameData.turn === user.id && (
-        <div className="font-bold text-gray-700 dark:text-gray-100 text-xl mb-2">
+        <div className="font-bold text-gray-700 dark:text-gray-100 text-xl mb-4">
           Hey {user.nickname}, its your turn to pick a random number
         </div>
       )}
-      <div className="relative mx-auto rounded-lg bg-gray-100 shadow-md h-2/3 text-gray-800 w-80">
+      <div className="relative flex flex-col mx-auto rounded-lg bg-gray-100 shadow-md h-3/4 text-gray-800 w-80">
         <nav className="bg-blue-300 w-full flex mb-4 p-3 rounded-sm shadow-md sm:items-baseline w-full sticky top-0">
           <div className="relative inline-block">
             {gameData && gameData.playerOne.id === user.id ? (
@@ -57,8 +57,8 @@ const GameArea = ({ socket, user }) => {
         {gameData && gameData.winner && (
           <Overlay data={gameData} user={user} socket={socket} />
         )}
-        <div className="w-full mb-4 px-4 overscroll-auto">
-          <div className="relative inline-flex">
+        <div className="flex-grow w-full mb-4 px-4 overflow-y-auto">
+          <div className="flex justify-start">
             {gameData && gameData.playerOne && (
               <img
                 className="inline-block object-cover w-12 h-12 rounded-full"
@@ -78,28 +78,26 @@ const GameArea = ({ socket, user }) => {
             <Attempt gameData={gameData} />
           )}
         </div>
-        {gameData && gameData.turn === user.id && (
-          <div className="absolute bottom-0 left-0 right-0 text-center space-x-6 mb-3">
-            <div
-              className="bg-blue-400 shadow-lg w-12 h-12 rounded-full inline-flex justify-center py-1 px-2 items-center font-bold text-xl cursor-pointer text-gray-50"
-              onClick={() => handleAttempt(-1)}
-            >
-              -1
-            </div>
-            <div
-              className="bg-blue-400 shadow-lg w-12 h-12 rounded-full inline-flex justify-center py-1 px-2 items-center font-bold text-xl cursor-pointer text-gray-50"
-              onClick={() => handleAttempt(0)}
-            >
-              0
-            </div>
-            <div
-              className="bg-blue-400 shadow-lg w-12 h-12 rounded-full inline-flex justify-center py-1 px-2 items-center font-bold text-xl cursor-pointer text-gray-50"
-              onClick={() => handleAttempt(1)}
-            >
-              +1
-            </div>
+        <div className="text-center space-x-6 mb-3">
+          <div
+            className="bg-blue-400 shadow-lg w-12 h-12 rounded-full inline-flex justify-center py-1 px-2 items-center font-bold text-xl cursor-pointer text-gray-50"
+            onClick={() => handleAttempt(-1)}
+          >
+            -1
           </div>
-        )}
+          <div
+            className="bg-blue-400 shadow-lg w-12 h-12 rounded-full inline-flex justify-center py-1 px-2 items-center font-bold text-xl cursor-pointer text-gray-50"
+            onClick={() => handleAttempt(0)}
+          >
+            0
+          </div>
+          <div
+            className="bg-blue-400 shadow-lg w-12 h-12 rounded-full inline-flex justify-center py-1 px-2 items-center font-bold text-xl cursor-pointer text-gray-50"
+            onClick={() => handleAttempt(1)}
+          >
+            +1
+          </div>
+        </div>
       </div>
     </React.Fragment>
   );

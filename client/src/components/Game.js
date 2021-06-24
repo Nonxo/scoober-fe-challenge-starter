@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { generateUserId } from "../utils/utils";
 import Logo from "../assets/img/logo.png";
 import { ArrowCircleRightIcon } from "@heroicons/react/outline";
@@ -10,9 +10,9 @@ const Game = ({ socket }) => {
   const [user, setUser] = useState(null);
   const [optionValue, setOptionValue] = useState("single");
   const [showNextButton, setShowNextButton] = useState(false);
-  const [isSingleUser, setIsSingleUser] = useState(true);
   const [gameData, setGameData] = useState(null);
   const dispatch = useDispatch();
+  let isSingleUser = true;
   const player = {
     id: generateUserId(),
     nickname: "",
@@ -30,23 +30,21 @@ const Game = ({ socket }) => {
     }
   };
 
-  const handleOptionChange = (event) => {
-    setOptionValue(event.target.value);
+  useEffect(() => {
     if (optionValue === "single") {
+      isSingleUser = true;
       player.isSingleUser = true;
-      setUser(player);
-      setIsSingleUser(true);
-    } else {
-      player.isSingleUser = false;
-      setIsSingleUser(false);
     }
-  };
+    if (optionValue === "multi") {
+      isSingleUser = false;
+      player.isSingleUser = false;
+    }
+  }, [optionValue]);
 
   const onPlayModeSelected = () => {
     socket.emit("newgame", { user, isSingleUser });
     socket.on("game", (data) => {
       setGameData(data);
-      console.log(data);
       dispatch(handleRequest("FETCH_PLAYER_DATA", data));
     });
   };
@@ -82,7 +80,7 @@ const Game = ({ socket }) => {
                 type="radio"
                 className="form-radio h-5 w-5 text-gray-600"
                 value="single"
-                onChange={handleOptionChange}
+                onChange={() => setOptionValue("single")}
                 checked={optionValue === "single"}
               />
               <span className="ml-2 text-gray-500 font-medium text-sm">
@@ -94,7 +92,7 @@ const Game = ({ socket }) => {
                 type="radio"
                 className="form-radio h-5 w-5 text-gray-600"
                 value="multi"
-                onChange={handleOptionChange}
+                onChange={() => setOptionValue("multi")}
                 checked={optionValue === "multi"}
               />
               <span className="ml-2 text-gray-500 font-medium text-sm">
@@ -102,7 +100,7 @@ const Game = ({ socket }) => {
               </span>
             </label>
           </div>
-          {isSingleUser && showNextButton && (
+          {player.isSingleUser && showNextButton && (
             <div className="flex justify-end mt-5">
               <ArrowCircleRightIcon
                 className="text-center h-8 w-8 text-gray-500 cursor-pointer"
@@ -110,16 +108,18 @@ const Game = ({ socket }) => {
               />
             </div>
           )}
-          {!isSingleUser && gameData?.playerTwo == null && showNextButton && (
-            <div className="flex justify-end mt-5">
-              <button
-                type="button"
-                className="inline-flex items-center bg-blue-500 hover:bg-blue-700 focus:outline-none text-white text-center py-2 px-3 rounded-full"
-              >
-                Join Game
-              </button>
-            </div>
-          )}
+          {!player.isSingleUser &&
+            gameData?.playerOne !== user.id &&
+            showNextButton && (
+              <div className="flex justify-end mt-5">
+                <button
+                  type="button"
+                  className="inline-flex items-center bg-blue-500 hover:bg-blue-700 focus:outline-none text-white text-center py-2 px-3 rounded-full"
+                >
+                  Join Game
+                </button>
+              </div>
+            )}
         </div>
       ) : (
         <GameArea socket={socket} user={user} />

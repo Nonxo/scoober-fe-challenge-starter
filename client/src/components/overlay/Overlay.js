@@ -14,16 +14,12 @@ const Overlay = ({ socket, data, user }) => {
     socket.emit("newgame", { user, isSingleUser });
     socket.on("game", (data) => {
       setGameData(data);
-      console.log(data);
       dispatch(handleRequest("FETCH_PLAYER_DATA", data));
     });
   };
   const leaveGame = () => {
-    socket.emit("left");
-    socket.on("game", (data) => {
-      console.log(data);
-      setGameData(data);
-      dispatch(handleRequest("FETCH_PLAYER_DATA", data));
+    socket.emit("left", (event) => {
+      console.log(event);
     });
   };
   return (
