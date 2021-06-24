@@ -1,12 +1,16 @@
 import React, { useState } from "react";
 import Game from "./components/Game";
 import socketIOClient from "socket.io-client";
-const SERVER = "http://127.0.0.1:5000";
+const SERVER = "https://scoober-fe-challenge.herokuapp.com/";
 
 function App() {
   const [loading, setLoading] = useState(false);
   const [startGame, setStartGame] = useState(false);
-  const socket = socketIOClient(SERVER);
+  const socket = socketIOClient(SERVER, {
+    extraHeaders: {
+      "my-custom-header": "abcd",
+    },
+  });
 
   const handleClickEvent = () => {
     setLoading(true);
