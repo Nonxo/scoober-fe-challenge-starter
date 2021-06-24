@@ -12,7 +12,8 @@ This repository contains two folders;
 The core technologies utilized in this web app are:
 
 * JavaScript - the language used to develop the core logic of the dashboard.
-* Express - Node.js framework used to initiate connection between the backend and the frontend via a REST API. 
+* Express - Node.js framework used to initiate connection between the backend and the frontend via a REST API.
+* Socket.io - Socket.IO is a library used create real-time, bidirectional and event-based communication between the frontend and the backend server.
 * React - The JavaScript library used to build and manage the core architecture of the frontend.
 * Redux - This is a React dependency or library used in state management across the frontend.
 * Html - The language used to structure web pages and its content.
