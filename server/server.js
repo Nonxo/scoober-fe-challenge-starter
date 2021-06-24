@@ -1,8 +1,14 @@
+const cors = require("cors");
 const express = require("express");
 const app = express();
+app.use(cors());
 const http = require("http").createServer(app);
 const io = require("socket.io")(http, {
-  cors: { origin: "*", method: ["GET", "POST"] },
+  cors: {
+    origin: "*",
+    method: ["GET", "POST"],
+    allowedHeaders: ["content-type"],
+  },
 });
 
 const port = process.env.PORT || 5000;
