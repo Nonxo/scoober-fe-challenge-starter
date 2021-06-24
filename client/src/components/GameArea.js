@@ -6,7 +6,6 @@ import Overlay from "./overlay/Overlay";
 const GameArea = ({ socket, user }) => {
   const gameSelector = useSelector((state) => state.Game);
   const [gameData, setGameData] = useState(null);
-  const [selectedNumber, setSelectedNumber] = useState(null);
 
   useEffect(() => {
     setGameData(gameSelector.data);
@@ -15,7 +14,6 @@ const GameArea = ({ socket, user }) => {
 
   const handleAttempt = (number) => {
     const playerAttempt = { gameId: gameData.id, number, user };
-    setSelectedNumber(number);
     socket.emit("turn", playerAttempt);
     socket.on("game", (data) => {
       setGameData(data);
@@ -24,12 +22,12 @@ const GameArea = ({ socket, user }) => {
 
   return (
     <React.Fragment>
-      {gameData && gameData.turn === user.id && (
+      {gameData && !gameData.winner && gameData.turn === user.id && (
         <div className="font-bold text-gray-700 dark:text-gray-100 text-xl mb-2">
           Hey {user.nickname}, its your turn to pick a random number
         </div>
       )}
-      <div className="relative mx-auto rounded-lg bg-gray-100 shadow-md text-gray-800 w-80">
+      <div className="relative mx-auto rounded-lg bg-gray-100 shadow-md h-2/3 text-gray-800 w-80">
         <nav className="bg-blue-300 w-full flex mb-4 p-3 rounded-sm shadow-md sm:items-baseline w-full sticky top-0">
           <div className="relative inline-block">
             {gameData && gameData.playerOne.id === user.id ? (
@@ -57,7 +55,7 @@ const GameArea = ({ socket, user }) => {
           </div>
         </nav>
         {gameData && gameData.winner && (
-          <Overlay gameData={gameData} user={user} />
+          <Overlay data={gameData} user={user} socket={socket} />
         )}
         <div className="w-full mb-4 px-4 overscroll-auto">
           <div className="relative inline-flex">
@@ -81,7 +79,7 @@ const GameArea = ({ socket, user }) => {
           )}
         </div>
         {gameData && gameData.turn === user.id && (
-          <div className="flex space-x-6 mb-3 justify-center">
+          <div className="absolute bottom-0 left-0 right-0 text-center space-x-6 mb-3">
             <div
               className="bg-blue-400 shadow-lg w-12 h-12 rounded-full inline-flex justify-center py-1 px-2 items-center font-bold text-xl cursor-pointer text-gray-50"
               onClick={() => handleAttempt(-1)}

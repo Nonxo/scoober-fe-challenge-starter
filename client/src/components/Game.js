@@ -17,7 +17,7 @@ const Game = ({ socket }) => {
     id: generateUserId(),
     nickname: "",
     score: "",
-    isWinner: false,
+    isSingleUser: true,
   };
 
   const handleChange = (event) => {
@@ -33,8 +33,11 @@ const Game = ({ socket }) => {
   const handleOptionChange = (event) => {
     setOptionValue(event.target.value);
     if (optionValue === "single") {
+      player.isSingleUser = true;
+      setUser(player);
       setIsSingleUser(true);
     } else {
+      player.isSingleUser = false;
       setIsSingleUser(false);
     }
   };
