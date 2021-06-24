@@ -1,8 +1,13 @@
-const io = require("socket.io")(5000, {
-  cors: {
-    origin: "*",
-  },
+const express = require("express");
+const app = express();
+const http = require("http").createServer(app);
+const io = require("socket.io")(http, {
+  cors: { origin: "*", method: ["GET", "POST"] },
 });
+
+const port = process.env.PORT || 5000;
+
+const index = require("./route");
 const {
   PLAYER,
   createNewGame,
@@ -11,6 +16,8 @@ const {
   turn,
   leaveGame,
 } = require("./utils");
+
+app.use(index);
 
 //Fake DB
 let gamesState = [];
@@ -24,12 +31,14 @@ const onLeave = (state, id) => {
 };
 
 io.on("connection", (socket) => {
+  console.log(socket.id, "a user connected");
+
   socket.on("newgame", ({ user, isSingleUser }) => {
     socket.userId = user.id;
 
     if (isSingleUser) {
+      console.log(isSingleUser);
       const game = createNewGame({ user, isSingleUser });
-
       gamesState.push(game);
 
       socket.join(game.id);
@@ -61,6 +70,8 @@ io.on("connection", (socket) => {
 
   socket.on("turn", (attempt) => {
     gamesState = turn(gamesState, attempt);
+    console.log(gamesState);
+    console.log(attempt.gameId);
 
     const game = findGame(gamesState, attempt.gameId);
 
@@ -88,3 +99,5 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", () => onLeave(gamesState, socket.userId));
 });
+
+http.listen(port, () => console.log(`Listening on port ${port}`));
