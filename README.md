@@ -28,7 +28,7 @@ The core technologies utilized in this web app are:
 * From the `./client` directory run the command `npm install` to install all dependencies in the `package.json` file.
 * To run the project on the browser use command `npm start` from the `server` directory to start up the backend server and then use the same command from the `client` directory to start the frontend.  
 * Open [http://localhost:3000](http://localhost:3000) to view the frontend in the browser.
-* You can also view the hosted version of the app on this [link](https://frontend-code-challenge.herokuapp.com)
+* You can also view the hosted version of the app on this [link](https://scoober-game.netlify.app/)
 
 ### To run the test ###
 
