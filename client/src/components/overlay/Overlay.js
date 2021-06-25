@@ -26,7 +26,7 @@ const Overlay = ({ socket, data, user }) => {
     <React.Fragment>
       <div id="overlay">
         <div id="text">
-          <img className="flex mb-2" src={Balloons} alt="Profile image" />
+          <img className="flex mb-2" src={Balloons} alt="balloons" />
           <span className="block font-bold text-4xl text-white text-center mb-3">
             {gameData && gameData.winner === user.id ? "You won!" : "You lost!"}
           </span>

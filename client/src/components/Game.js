@@ -57,7 +57,7 @@ const Game = ({ socket }) => {
             <img
               className="inline object-cover w-16 h-16 mr-2 rounded-full"
               src={Logo}
-              alt="Profile image"
+              alt="Profile"
             />
           </div>
           <div className="mt-4 mb-4">
