@@ -101,25 +101,14 @@ const Game = ({ socket }) => {
             </label>
           </div>
           {player.isSingleUser && showNextButton && (
-            <div className="flex justify-end mt-5">
+            <div className="flex flex-col items-end justify-end mt-5">
               <ArrowCircleRightIcon
                 className="text-center h-8 w-8 text-gray-500 cursor-pointer"
                 onClick={onPlayModeSelected}
               />
+              <span className="text-gray-500 text-md">Next</span>
             </div>
           )}
-          {!player.isSingleUser &&
-            gameData?.playerOne !== user.id &&
-            showNextButton && (
-              <div className="flex justify-end mt-5">
-                <button
-                  type="button"
-                  className="inline-flex items-center bg-blue-500 hover:bg-blue-700 focus:outline-none text-white text-center py-2 px-3 rounded-full"
-                >
-                  Join Game
-                </button>
-              </div>
-            )}
         </div>
       ) : (
         <GameArea socket={socket} user={user} />
