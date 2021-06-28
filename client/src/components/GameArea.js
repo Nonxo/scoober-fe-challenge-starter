@@ -9,9 +9,9 @@ const GameArea = ({ socket, user }) => {
 
   useEffect(() => {
     setGameData(gameSelector.data);
-    console.log(gameSelector.data);
   }, [gameSelector]);
 
+  // To make attempt
   const handleAttempt = (number) => {
     const playerAttempt = { gameId: gameData.id, number, user };
     socket.emit("turn", playerAttempt);

@@ -20,6 +20,7 @@ const Game = ({ socket }) => {
     isSingleUser: true,
   };
 
+  // To handle player nickname input
   const handleChange = (event) => {
     if (event.target.value) {
       player.nickname = event.target.value;
@@ -30,6 +31,7 @@ const Game = ({ socket }) => {
     }
   };
 
+  // Switch play mode based on user selection
   useEffect(() => {
     if (optionValue === "single") {
       isSingleUser = true;
@@ -41,6 +43,7 @@ const Game = ({ socket }) => {
     }
   }, [optionValue]);
 
+  // To start a new game depending on the play mode selected
   const onPlayModeSelected = () => {
     socket.emit("newgame", { user, isSingleUser });
     socket.on("game", (data) => {
