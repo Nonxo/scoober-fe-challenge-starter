@@ -12,7 +12,6 @@ const Game = ({ socket }) => {
   const [showNextButton, setShowNextButton] = useState(false);
   const [gameData, setGameData] = useState(null);
   const dispatch = useDispatch();
-  let isSingleUser = true;
   const player = {
     id: generateUserId(),
     nickname: "",
@@ -34,17 +33,16 @@ const Game = ({ socket }) => {
   // Switch play mode based on user selection
   useEffect(() => {
     if (optionValue === "single") {
-      isSingleUser = true;
       player.isSingleUser = true;
     }
     if (optionValue === "multi") {
-      isSingleUser = false;
       player.isSingleUser = false;
     }
   }, [optionValue]);
 
   // To start a new game depending on the play mode selected
   const onPlayModeSelected = () => {
+    const isSingleUser = player.isSingleUser;
     socket.emit("newgame", { user, isSingleUser });
     socket.on("game", (data) => {
       setGameData(data);
