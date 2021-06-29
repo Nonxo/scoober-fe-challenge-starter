@@ -18,7 +18,10 @@ function App() {
   };
 
   return (
-    <div className="container flex flex-col justify-center items-center h-screen m-auto">
+    <div
+      data-testid="app"
+      className="container flex flex-col justify-center items-center h-screen m-auto"
+    >
       {!startGame ? (
         <>
           <div className="text-4xl font-extrabold text-center dark:text-white">
@@ -73,7 +76,7 @@ function App() {
           </div>
         </>
       ) : (
-        <Game socket={socket} />
+        <Game data-testid="game" socket={socket} />
       )}
     </div>
   );
