@@ -6,7 +6,6 @@ import { useDispatch } from "react-redux";
 
 const Overlay = ({ socket, data, user }) => {
   const dispatch = useDispatch();
-
   const [gameData, setGameData] = useState(data);
 
   const newGame = () => {
@@ -18,10 +17,12 @@ const Overlay = ({ socket, data, user }) => {
     });
   };
   const leaveGame = () => {
-    socket.emit("left", (event) => {
-      console.log(event);
+    socket.emit("left");
+    socket.on("game", (data) => {
+      console.log(data);
     });
   };
+
   return (
     <React.Fragment>
       <div id="overlay">
